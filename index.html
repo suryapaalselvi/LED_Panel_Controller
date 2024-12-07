@@ -1,0 +1,357 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Neumorphic Color Picker</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="https://unpkg.com/vue@3.4.21/dist/vue.global.prod.js"></script>
+    <script src="https://unpkg.com/@radial-color-picker/vue-color-picker/dist/vue-color-picker.umd.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/@radial-color-picker/vue-color-picker/dist/vue-color-picker.min.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Sarina&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=graphic_eq" />
+    <!-- Font Awesome CDN -->
+    <!-- <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=widget_small" /> -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Avenir', Helvetica, Arial, sans-serif;
+            background-color: #d8d2d2; /* Soft background color */
+            color: #555;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+        }
+
+        #app {
+            background-color: #d1d0d0;
+            border-radius: 20px;
+            box-shadow: 20px 20px 60px rgba(0, 0, 0, 0.2), -20px -20px 60px rgba(255, 255, 255, 0.6); /* Soft neumorphic shadow */
+            /* padding: 30px; */
+            text-align: center;
+            width: 100%;
+            /* max-height: 100vh; */
+            max-width: 400px;
+            /* position: relative; */
+        }
+
+        h1 {
+            font-size: 2em;
+            color: #ffffff;
+            margin-top: 20px;
+            font-weight: 600;
+            font-family: "Sarina", cursive;
+  font-weight: 400;
+  font-style: normal;
+        }
+
+        /* Row container */
+        .row {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
+
+        /* Neumorphic Buttons */
+        .neumorphic-button {
+            width: 60px;
+            height: 60px;
+            background-color: #e0e0e0; /* Softer background for buttons */
+            border-radius: 10%;
+            box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.1), -10px -10px 20px rgba(255, 255, 255, 0.7); /* Subtle shadow */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            font-size: 30px;
+            transition: background-color 0.3s ease, transform 0.2s;
+            margin: 0 10px;
+        }
+        .footer{
+            display: flex;
+            background-color: #d1cbcb;
+            padding: 10px;
+            margin-bottom: 20px;
+            justify-content: space-around;
+            border-radius: 20px;
+
+        }
+
+        .neumorphic-button:active {
+            transform: scale(0.95);
+        }
+
+        .button-on {
+            /* background-color: #4caf50; Green when on */
+            color: rgb(0, 0, 0);
+        }
+
+        .button-off {
+            /* background-color: #e53935; Red when off */
+            color: rgb(102, 98, 98);
+        }
+
+        .color-picker-container {
+            width: 250px;
+            height: 250px;
+            background: #d8d2d2;
+            border-radius: 50%;
+            border: solid rgb(221, 219, 219) 4px;
+            box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.1), -10px -10px 20px rgba(255, 255, 255, 0.7); /* Subtle shadow */
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .color-picker-container:hover{
+            transform: scale(1.05);
+            box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.2), -10px -10px 20px rgba(255, 255, 255, 0.9);
+ 
+        }
+        .color-palette {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            padding: 20px;
+            
+        }
+
+        .palette-color {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 60px;
+            height: 60px;
+            background-color: #e0e0e0; /* Softer background for buttons */
+            border-radius: 30%;
+            border: solid rgb(221, 219, 219) 4px;
+            box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.1), -10px -10px 20px rgba(255, 255, 255, 0.7); /* Subtle shadow */
+            cursor: pointer;
+            /* box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.1), -10px -10px 20px rgba(255, 255, 255, 0.7); */
+            transition: transform 0.2s, box-shadow 0.3s;
+        }
+
+        .palette-color:hover {
+            transform: scale(1.1);
+            box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.2), -10px -10px 20px rgba(255, 255, 255, 0.9);
+        }
+
+        .palette-color.selected {
+            border: 3px solid #4a90e2;
+        }
+
+        .slider-container {
+            width: 100%;
+                        padding: 30px;
+        }
+
+        .slider-label {
+            font-size: 16px;
+            margin-bottom: 10px;
+            display: block;
+            color: #333;
+        }
+
+        .slider {
+            width: 100%;
+            height: 12px;
+            border-radius: 12px;
+            appearance: none;
+            background: #f1f1f1;
+            box-shadow: inset 10px 10px 20px rgba(0, 0, 0, 0.1), inset -10px -10px 20px rgba(255, 255, 255, 0.7);
+            transition: all 0.3s ease;
+        }
+
+        .slider:hover {
+            background: #ddd;
+        }
+
+        .slider::-webkit-slider-thumb {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #4a90e2;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .neumorphic-button {
+                width: 50px;
+                height: 50px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .neumorphic-button {
+                width: 45px;
+                height: 45px;
+            }
+        }
+        .material-symbols-outlined {
+            font-variation-settings:
+            'FILL' 0,
+            'wght' 400,
+            'GRAD' 0,
+            'opsz' 48;
+            font-size: 48px; /* Increase the font size */
+
+        }
+
+    </style>
+</head>
+<body>
+    <div id="app">
+        <!-- Row 1: Header -->
+        <div class="row">
+            <h1>YaYa Lamp</h1>
+        </div>
+
+        <!-- Row 2: Simple Neumorphic Buttons (4 Buttons) with Icons -->
+
+
+        <!-- Row 3: Color Picker -->
+        <div class="row">
+            <div class="color-picker-container">
+                <color-picker v-bind="color" @input="onInput"></color-picker>
+            </div>
+        </div>
+
+        <!-- Row 4: Color Pallets -->
+        <div class="row">
+            <div class="color-palette">
+                <div
+                    v-for="palette in palettes"
+                    :key="palette.name"
+                    class="palette-color"
+                    :class="{ selected: palette.color === selectedColor }"
+                    :style="{ backgroundColor: palette.color }"
+                    @click="selectPalette(palette.color)"
+                ></div>
+            </div>
+        </div>
+
+        <!-- Row 5: Brightness Slider -->
+        <div class="row">
+            <div class="slider-container">
+                <label for="brightness" class="slider-label">Brightness: {{ color.luminosity }}%</label>
+                <input
+                    type="range"
+                    id="brightness"
+                    v-model="color.luminosity"
+                    min="0"
+                    max="100"
+                    class="slider"
+                />
+            </div>
+        </div>
+        <!-- <div class="row"> -->
+            <div class="footer">
+            <div class="palette-color " >
+                <span class="material-symbols-outlined">
+                    graphic_eq
+                    </span>
+                <!-- <i :class="button1State ? 'fas fa-power-off' : 'fas fa-power-on'"></i> -->
+            </div>
+            <div class="palette-color " >
+
+                <!-- <i :class="button2State ? 'fas fa-power-off' : 'fas fa-power-on'"></i> -->
+            </div>
+            <div class="palette-color " >
+                <!-- <i :class="button3State ? 'fas fa-power-off' : 'fas fa-power-on'"></i> -->
+            </div>
+            <div class="palette-color " >
+                <!-- <i :class="button4State ? 'fas fa-power-off' : 'fas fa-power-on'"></i> -->
+            </div>
+        </div>
+        <!-- </div> -->
+    </div>
+
+    <script>
+        const { createApp } = Vue;
+        const ColorPicker = window.VueColorPicker;
+
+        createApp({
+            components: { ColorPicker },
+            data() {
+                return {
+                    color: {
+                        hue: 0,
+                        saturation: 100,
+                        luminosity: 50,
+                        alpha: 1,
+                    },
+                    palettes: [
+                        { name: 'Red', color: '#ff0000' },
+                        { name: 'Green', color: '#00ff00' },
+                        { name: 'Blue', color: '#0000ff' },
+                        { name: 'Yellow', color: '#ffff00' },
+                        { name: 'Orange', color: '#ffa500' },
+                        { name: 'Purple', color: '#800080' },
+                        { name: 'Pink', color: '#ffc0cb' },
+                        { name: 'Magenta', color: '#ff00ff' },
+                    ],
+                    selectedColor: null,
+                    // Button States from LocalStorage
+                    button1State: JSON.parse(localStorage.getItem('button1State')) || false,
+                    button2State: JSON.parse(localStorage.getItem('button2State')) || false,
+                    button3State: JSON.parse(localStorage.getItem('button3State')) || false,
+                    button4State: JSON.parse(localStorage.getItem('button4State')) || false,
+                };
+            },
+            methods: {
+                onInput(hue) {
+                    this.color.hue = hue;
+                },
+                selectPalette(color) {
+                    this.selectedColor = color;
+                    const [r, g, b] = this.hexToRgb(color);
+                    this.color.hue = this.rgbToHue(r, g, b);
+                },
+                hexToRgb(hex) {
+                    const bigint = parseInt(hex.slice(1), 16);
+                    const r = (bigint >> 16) & 255;
+                    const g = (bigint >> 8) & 255;
+                    const b = bigint & 255;
+                    return [r, g, b];
+                },
+                rgbToHue(r, g, b) {
+                    r /= 255;
+                    g /= 255;
+                    b /= 255;
+                    const max = Math.max(r, g, b),
+                        min = Math.min(r, g, b);
+                    let h = 0;
+                    if (max !== min) {
+                        if (max === r) h = (g - b) / (max - min);
+                        if (max === g) h = (b - r) / (max - min) + 2;
+                        if (max === b) h = (r - g) / (max - min) + 4;
+                        h *= 60;
+                        if (h < 0) h += 360;
+                    }
+                    return h;
+                },
+                toggleButton(buttonIndex) {
+                    this[`button${buttonIndex}State`] = !this[`button${buttonIndex}State`];
+                    localStorage.setItem(`button${buttonIndex}State`, this[`button${buttonIndex}State`]);
+                }
+            },
+        }).mount('#app');
+    </script>
+</body>
+</html>
